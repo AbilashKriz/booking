@@ -1,5 +1,6 @@
 package main
 
+//here we specify the routes and the middleware needed for our application
 import (
 	"net/http"
 
