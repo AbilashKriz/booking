@@ -1,0 +1,20 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container">
+        <div class="row">
+             <div class="column">
+                <h1>About go? lesGo!</h1>
+                <p>
+                    <h2>testing</h2>
+                    {{if ne (index .StringMap "remote_ip") ""}}
+                        The ip address of the machine hitting the page is {{index .StringMap "remote_ip"}}
+                    {{else}}
+                        You need to load the <a href="/">home.page</a> to display the ip address
+                    {{end}}
+                </p>
+                
+            </div>
+        </div>
+    </div>
+{{end}}

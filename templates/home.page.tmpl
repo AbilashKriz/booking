@@ -1,0 +1,16 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <h1>Hey There</h1>
+                <h2>Welcome to my home page</h2>
+                <p> Yeah! this page is of no use . . haha</p>
+                <p> This is from template {{index .stringmap "test"}}
+            </div>
+        </div>
+    </div>
+{{end}}
+
+

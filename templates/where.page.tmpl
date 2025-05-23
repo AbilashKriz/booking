@@ -1,0 +1,12 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <h1>Just started and running in my local machine</h1>
+                <p> This is from template {{index .stringmap "test"}}
+            </div>
+        </div>
+    </div>
+{{end}}
