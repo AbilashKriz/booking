@@ -2,63 +2,55 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"time"
-
-	"net/http"
-
-	"github.com/AbilashKriz/bookings/pkg/config"
-	"github.com/AbilashKriz/bookings/pkg/handlers"
-	"github.com/AbilashKriz/bookings/pkg/renders"
-
 	"github.com/alexedwards/scs/v2"
+	"github.com/tsawler/bookings-app/pkg/config"
+	"github.com/tsawler/bookings-app/pkg/handlers"
+	"github.com/tsawler/bookings-app/pkg/render"
+	"log"
+	"net/http"
+	"time"
 )
 
 const portNumber = ":8080"
 
-// Creating a new vaiable for the struct we created in config folder
 var app config.AppConfig
-
 var session *scs.SessionManager
 
+// main is the main function
 func main() {
-
+	// change this to true when in production
 	app.InProduction = false
 
+	// set up the session
 	session = scs.New()
-
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	session.Cookie.Secure = app.InProduction
 
 	app.Session = session
-	//Running the cretingTemplate function from rendres package
-	tc, err := renders.CreatingTemplateCache()
+
+	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("cannot create template cache")
 	}
 
-	//assiging the output from the cretingtemplate function to the app variable from config folder
-
-	app.TempCache = tc
-
+	app.TemplateCache = tc
 	app.UseCache = false
 
 	repo := handlers.NewRepo(&app)
-	handlers.NewHandler(repo)
-	//In render function now we do not have to run the createtemplate function as we running it here , all we have to do is to create a pointer to the app variable so
-	//so that we can use the values directly
+	handlers.NewHandlers(repo)
 
-	renders.NewTemplate(&app)
+	render.NewTemplates(&app)
 
-	srv := http.Server{
+	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
+
+	srv := &http.Server{
 		Addr:    portNumber,
-		Handler: Route(&app),
+		Handler: routes(&app),
 	}
-	fmt.Println("listening on port", portNumber)
-	err = srv.ListenAndServe()
 
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

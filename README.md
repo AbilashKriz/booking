@@ -1,12 +1,10 @@
-Booking Reservation Application 
+# Bookings and Reservations
 
-Built using Golang
-
-Golang version - go1.24.2
+The repository for [Building Modern Web Applications with Go](https://www.udemy.com/course/building-modern-web-applications-with-go/?referralCode=0415FB906223F10C6800).
 
 
-Uses external packages.
 
--   [Session manager](https://github.com/alexedwards/scs/v2 v2.8.0)
--	[chi router](https://github.com/go-chi/chi/v5 v5.2.1)
--	[nosurf-csrf token](https://github.com/justinas/nosurf v1.2.0)
+- Built in Go version 1.15
+- Uses the [chi router](github.com/go-chi/chi)
+- Uses [alex edwards scs session management](github.com/alexedwards/scs)
+- Uses [nosurf](github.com/justinas/nosurf)

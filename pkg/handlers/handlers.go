@@ -1,65 +1,76 @@
 package handlers
 
 import (
-	"fmt"
+	"github.com/tsawler/bookings-app/pkg/config"
+	"github.com/tsawler/bookings-app/pkg/models"
+	"github.com/tsawler/bookings-app/pkg/render"
 	"net/http"
-
-	"github.com/AbilashKriz/bookings/pkg/config"
-	"github.com/AbilashKriz/bookings/pkg/models"
-	"github.com/AbilashKriz/bookings/pkg/renders"
 )
 
-// Repositoy used by the handler
+// Repo the repository used by the handlers
 var Repo *Repository
 
-// Below is the repository type
+// Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
 }
 
-//Creates new repository
-
+// NewRepo creates a new repository
 func NewRepo(a *config.AppConfig) *Repository {
 	return &Repository{
 		App: a,
 	}
 }
 
-//check
-
-//sets the repository for the handlers
-
-func NewHandler(r *Repository) {
+// NewHandlers sets the repository for the handlers
+func NewHandlers(r *Repository) {
 	Repo = r
 }
 
+// Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	MachineIP := r.RemoteAddr
-	fmt.Println(MachineIP)
-	m.App.Session.Put(r.Context(), "remote_ip", MachineIP)
+	remoteIP := r.RemoteAddr
+	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
-	stringMap := make(map[string]string)
-	stringMap["test"] = "Home's loaded!!"
-	renders.RenderingHtml(w, "home.page.tmpl", &models.TempData{
-		StringMap: stringMap,
-	})
-
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
+// About is the handler for the about page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	// perform some logic
 	stringMap := make(map[string]string)
+	stringMap["test"] = "Hello, again"
 
-	remote_IP := m.App.Session.GetString(r.Context(), "remote_ip")
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
 
-	stringMap["remote_ip"] = remote_IP
-	fmt.Println("Printing the remote IP")
-	fmt.Println(remote_IP)
-
-	renders.RenderingHtml(w, "about.page.tmpl", &models.TempData{
+	// send data to the template
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
 
-func (m *Repository) Where(w http.ResponseWriter, r *http.Request) {
-	renders.RenderingHtml(w, "where.page.tmpl", &models.TempData{})
+// Reservation renders the make a reservation page and displays form
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "make-reservation.page.tmpl", &models.TemplateData{})
+}
+
+// Generals renders the room page
+func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "generals.page.tmpl", &models.TemplateData{})
+}
+
+// Majors renders the room page
+func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "majors.page.tmpl", &models.TemplateData{})
+}
+
+// Availability renders the search availability page
+func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "search-availability.page.tmpl", &models.TemplateData{})
+}
+
+// Contact renders the contact page
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{})
 }
